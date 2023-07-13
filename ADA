@@ -1,0 +1,789 @@
+1 #BinarySearch
+import java.util.Scanner;
+
+public class BinarySearch
+{
+	int search(int arr[], int lb, int ub, int x)
+	{
+		if (lb <= ub)
+		{
+			int mid = (lb+ub)/2;
+			if (arr[mid] == x)
+				return mid;
+			else if (x<arr[mid])
+				return search(arr, lb, mid-1, x);
+			else
+				return search(arr, mid+1, ub, x);
+		}
+		return -1;
+	}
+	public static void main(String args[])
+	{
+		BinarySearch bs = new BinarySearch();
+		int n,se;
+		Scanner sc=new Scanner(System.in);
+		System.out.println("Enter number of elements:");
+		n=sc.nextInt();
+		int arr[]=new int[n];
+		System.out.println("Enter the elements of the array:");
+		for(int i=0;i<n;i++)
+			arr[i]=sc.nextInt();
+		System.out.println("Enter the searching element:");
+		se=sc.nextInt();
+		int loc = bs.search(arr, 0, n-1, se);
+		if (loc == -1)
+			System.out.println("The element is not present in the array");
+		else
+			System.out.println("The element is found at index " + loc);
+	}
+}
+
+2 # MergeSort
+import java.util.Scanner;
+public class MergeSort
+{
+	void merge(int arr[], int lb, int mid, int ub)
+    {
+        int n1 = mid - lb + 1;
+        int n2 = ub - mid;
+        int larr[] = new int [n1];
+        int rarr[] = new int [n2];
+        for (int i=0; i<n1; i++)
+            larr[i] = arr[lb + i];
+        for (int j=0; j<n2; ++j)
+            rarr[j] = arr[mid + 1+ j];
+       int i = 0, j = 0, k = lb;
+        while (i < n1 && j < n2)
+        {
+            if (larr[i] <= rarr[j])
+            {
+                arr[k++] = larr[i++];
+            }
+            else
+            {
+                arr[k++] = rarr[j++];
+            }
+        }
+  while (i < n1)
+        {
+            arr[k++] = larr[i++];
+        }
+   while (j < n2)
+        {
+            arr[k++] = rarr[j++];
+        }
+    }
+ void sort(int arr[], int lb, int ub)
+    {
+        if (lb < ub)
+        {
+            int mid = (lb+ub)/2;
+            sort(arr, lb, mid);
+            sort(arr , mid+1, ub);
+            merge(arr, lb, mid, ub);
+        }
+    }
+    static void printArray(int arr[])
+    {
+        int n = arr.length;
+        for (int i=0; i<n; i++)
+            System.out.print(arr[i] + " ");
+        System.out.println();
+    }
+    public static void main(String args[])
+    {
+    	int n;
+    	Scanner sc=new Scanner(System.in);
+		System.out.println("Enter number of elements:");
+		n=sc.nextInt();
+		int arr[]=new int[n];
+		System.out.println("Enter the elements of the array:");
+		for(int i=0;i<n;i++)
+			arr[i]=sc.nextInt();
+        System.out.println("Given Array elements are:");
+        printArray(arr);
+        MergeSort ms = new MergeSort();
+        ms.sort(arr, 0, n-1);
+        System.out.println("\nSorted array elements are:");
+        printArray(arr);
+    }
+}
+3 # Knapsack
+import java.util.Scanner; 
+class Knapsack 
+{ 
+	public static void main(String[] args) 
+	{
+		Scanner sc=new Scanner(System.in); 
+		int n,m;
+		System.out.println("Enter the number of objects");
+		n=sc.nextInt();
+		int weight[]=new int[n]; 
+		int profit[]=new int[n]; 
+		System.out.println("Enter the Profits of all objects"); 
+		for(int i=0;i<n;i++) 
+		{		
+			profit[i]=sc.nextInt();
+		}
+		System.out.println("Enter the weights of all objects"); 
+		for(int i=0;i<n;i++) 
+		{		
+			weight[i]=sc.nextInt();
+		}
+		System.out.println("Enter the Knapsack capacity");
+		m=sc.nextInt();
+		double p_w[]=new double[n];
+		for(int i=0;i<n;i++)
+		{
+			p_w[i]=(double)profit[i]/(double)weight[i];
+		}
+		
+		System.out.print("\nObject: ");
+		for(int i=1;i<=n;i++)
+		{
+			System.out.print(i+"     ");
+		}
+		System.out.print("\nProfit: ");
+		for(int i=0;i<n;i++)
+		{
+			System.out.print(profit[i]+"    ");
+		}
+		System.out.print("\nWeight: ");
+		for(int i=0;i<n;i++)
+		{
+			System.out.print(weight[i]+"     ");
+		}
+		System.out.print("\nP/W:    ");
+		for(int i=0;i<n;i++)
+		{
+			System.out.printf("%.2f  ",p_w[i]);
+		}
+		for(int i=0;i<n-1;i++)
+		{
+			for(int j=i+1;j<n;j++)
+			{
+				if(p_w[i]<p_w[j])
+				{
+					double temp=p_w[j];
+					p_w[j]=p_w[i];
+					p_w[i]=temp;
+					int temp1=profit[j];
+					profit[j]=profit[i];
+					profit[i]=temp1;
+					int temp2=weight[j];
+					weight[j]=weight[i];
+					weight[i]=temp2;
+				}
+			}
+		}
+		System.out.println("\nAfter Sorting according to profts/weights:");
+		System.out.print("Object: ");
+		for(int i=1;i<=n;i++)
+		{
+			System.out.print(i+"     ");
+		}
+		System.out.print("\nProfit: ");
+		for(int i=0;i<n;i++)
+		{
+			System.out.print(profit[i]+"     ");
+		}
+		System.out.print("\nWeight: ");
+		for(int i=0;i<n;i++)
+		{
+			System.out.print(weight[i]+"     ");
+		}
+		System.out.print("\nP/W:    ");
+		for(int i=0;i<n;i++)
+		{
+			System.out.printf("%.2f  ",p_w[i]);
+		}
+		int k=0;
+		double sum=0;
+		System.out.println();
+		while(m>0)
+		{
+			if(weight[k]<m)
+			{
+				sum+=1*profit[k];
+				m=m-weight[k];
+			}
+			else
+			{
+				sum=sum+(float)m/weight[k]*profit[k];
+				m=0;
+			}
+			k++;
+		}
+		System.out.println("Final Profit is: "+sum);
+	}
+}
+
+4 #JobSequence
+import java.util.*;
+public class JobSequence
+{
+  public static void main(String args[])
+  {
+    Scanner sc=new Scanner(System.in);
+    System.out.println("Enter the number of Jobs:");
+    int n=sc.nextInt();
+    String job[]=new String[n];
+    int p[]=new int[n];
+    int d[]=new int[n];
+    System.out.println("Enter the Jobs:");
+    for(int i=0;i<n;i++)
+    {
+    	job[i]=sc.next();
+    }
+    System.out.println("Enter the Profits:");
+    for(int i=0;i<n;i++)
+    {
+    	p[i]=sc.nextInt();
+    }
+    System.out.println("Enter the DeadLines:");
+    for(int i=0;i<n;i++)
+    {
+    	d[i]=sc.nextInt();
+    }
+    
+    System.out.println("Jobs in the given order:");
+    System.out.print("Job:     ");
+    for(int i=0;i<n;i++)
+    {
+      System.out.print(job[i]+" ");
+    }
+    System.out.print("\nProfit:  ");
+    for(int i=0;i<n;i++)
+    {
+      System.out.print(p[i]+" ");
+    }
+    System.out.print("\nDeadLine:");
+    for(int i=0;i<n;i++)
+    {
+      System.out.print(d[i]+"  ");
+    }
+    for(int i=0;i<n-1;i++)
+    {
+      for(int j=i+1;j<n;j++)
+      {
+          if(p[i]<p[j])
+          {
+              int temp=p[i];
+              p[i]=p[j];
+              p[j]=temp;
+              temp=d[i];
+              d[i]=d[j];
+              d[j]=temp;
+              String temp1=job[i];
+              job[i]=job[j];
+              job[j]=temp1;
+          }
+      }
+    }
+    System.out.println();
+    System.out.println("Jobs in the decreasing order of Profits:");
+    System.out.print("Job:     ");
+    for(int i=0;i<n;i++)
+    {
+      System.out.print(job[i]+" ");
+    }
+    System.out.print("\nProfit:  ");
+    for(int i=0;i<n;i++)
+    {
+      System.out.print(p[i]+" ");
+    }
+    System.out.print("\nDeadLine:");
+    for(int i=0;i<n;i++)
+    {
+      System.out.print(d[i]+"  ");
+    }
+    System.out.println();
+    int max=d[0];
+    for(int i=1;i<n;i++)
+    {
+      if(d[i]>max)
+      {
+        max=d[i];
+      }
+    }
+    String s[]=new String[max];
+    int profit=0;
+    for(int i=0;i<n;i++)
+    {
+      int dl=d[i];
+      dl=dl-1;
+      if(s[dl]==null )
+      {
+        s[dl]=job[i];
+        profit+=p[i];
+      }
+      else
+      {
+        while(dl!=-1)
+        {
+          if(s[dl]==null)
+          {
+            s[dl]=job[i];
+            profit+=p[i];
+            break;
+          }
+          dl=dl-1;
+        }
+      }
+    }
+    for(int i=0;i<max;i++)
+    {
+        System.out.print("--->"+s[i]);
+    }
+    System.out.println();
+    System.out.print("Profit Earned: "+profit);
+ }
+}
+
+5 #Kruskal
+import java.util.Scanner;
+import java.util.*;
+class Edge
+{
+	int v1,v2,wt; 
+}
+
+class Kruskal
+{
+	public static void main(String args[])
+	{
+		Scanner sc=new Scanner(System.in);
+		int nv,ne,i,j,mincost=0;
+		System.out.println("Enter number of vertices:");
+		nv=sc.nextInt();
+		System.out.println("Enter number of edges:");
+		ne=sc.nextInt();
+		Edge ed[]=new Edge[ne+1];
+		for(i=1;i<=ne;i++)
+		{
+			ed[i]=new Edge();
+			System.out.println("Enter the vertices and the weight of the edge "+(i)+ ":");
+			ed[i].v1=sc.nextInt();
+			ed[i].v2=sc.nextInt();
+			ed[i].wt=sc.nextInt();
+		}
+		for(i=1;i<=ne;i++)
+		{	
+			for(j=1;j<=ne-i;j++)
+			{
+				if(ed[j].wt>ed[j+1].wt)
+				{
+					Edge t=new Edge();
+					t=ed[j];
+					ed[j]=ed[j+1];
+					ed[j+1]=t;
+				}
+			}
+		}		
+		Graph g=new Graph(nv);		
+		System.out.println("MINIMUM SPANNING TREE:");
+		for(i=1;i<=ne;i++)
+		{
+			g.addEdge(ed[i].v1,ed[i].v2);
+			if(g.isCycle()==false)
+			{
+				System.out.println(ed[i].v1+ "-"+ ed[i].v2);
+				mincost+=ed[i].wt;
+			}
+			else
+				g.removeEdge(ed[i].v1,ed[i].v2);
+		}
+		System.out.println("MINIMUM COST = " +mincost);
+	}
+}
+
+
+
+
+class Graph
+{
+    private int nv;   
+    private LinkedList<Integer> adj[]; 
+  
+    Graph(int n) 
+    {
+        nv = n;
+        adj = new LinkedList[n+1];
+        for(int i=1; i<=n; ++i)
+            adj[i] = new LinkedList();
+    }
+
+    void addEdge(int u,int v) 
+    {
+        adj[u].add(v);
+        adj[v].add(u);
+    }
+    
+    void removeEdge(int u,int v) 
+    {    
+    	for (int i = 0; i < adj[u].size(); i++)
+    	{
+    		if (adj[u].get(i) == v)
+    		{
+    			adj[u].remove(i);
+    			break;
+    		}
+    	}
+     	for (int i = 0; i < adj[v].size(); i++)
+     	{
+     		if (adj[v].get(i) == u)
+     		{
+     			adj[v].remove(i);
+     			break;
+     		}
+     	}
+    }
+  
+    Boolean cycleCheck(int node,int parent,Boolean visited[])
+    {
+        visited[node] = true;
+        Integer i;
+        Iterator<Integer> it = adj[node].iterator();
+        while(it.hasNext())
+        {
+            i = it.next();
+            if (visited[i]==false)
+            {
+                if (cycleCheck(i,node,visited)==true)
+                    return true;
+            }
+            else if (i != parent)
+                return true;
+        }
+        return false;
+    }
+
+    Boolean isCycle()
+    {
+        Boolean visited[] = new Boolean[nv+1];
+        for (int i = 1; i <= nv; i++)
+            visited[i] = false;
+        for (int u = 1; u <= nv; u++)
+        {
+            if (visited[u]==false) 
+                if (cycleCheck(u,-1,visited))
+                    return true;
+        }
+        return false;
+    }
+}
+
+6 # APSP
+import java.util.Scanner;
+
+public class APSP
+{
+	public static void main(String[] args)
+	{
+		int n,i,j,k;
+		System.out.println("Enter the number of vertices:");
+		Scanner sc=new Scanner(System.in);
+		n=sc.nextInt();
+		int a[][]=new int[n+1][n+1];
+		System.out.println("Enter the weighted matrix:");
+		for(i=1;i<=n;i++)
+			for(j=1;j<=n;j++)
+				a[i][j]=sc.nextInt();
+		
+		for(k=1;k<=n;k++)
+			for(i=1;i<=n;i++)
+				for(j=1;j<=n;j++)
+					a[i][j]=Math.min(a[i][j],a[i][k]+a[k][j]);
+		
+		System.out.println("The shortest path matrix is:");
+		for(i=1;i<=n;i++)
+		{
+			for(j=1;j<=n;j++)
+			{
+				System.out.print(a[i][j]+" ");
+			}
+			System.out.println();
+		}
+	}
+
+}
+
+7 # TSP
+import java.util.Scanner;
+
+public class TSP 
+{
+	public static void main(String[] args)
+	{
+		Scanner sc=new Scanner(System.in);
+        	int n,i,j,cost;        
+        	System.out.println("Enter Number of cities:");
+        	n=sc.nextInt();        
+        	int c[][]=new int[n+1][n+1];
+        	int tour[]=new int[n+1];
+        	System.out.println("Enter the cost matrix:");
+        	for(i=1;i<=n;i++)
+        		for(j=1;j<=n;j++)
+                		c[i][j]=sc.nextInt();        
+
+        	for(i=1;i<=n;i++)
+        		tour[i]=i; 
+        
+        	cost=tspdp(c,tour,1,n);        
+	    	System.out.print("The Optimal Tour is: ");        
+	    	for(i=1;i<=n;i++)
+	     		System.out.print(tour[i]+"->"); 
+	    
+	    	System.out.println("1");        
+	    	System.out.println("Minimum Cost: "+cost);
+    	}
+	
+    	static int tspdp(int c[][],int tour[],int start,int n) 
+    	{
+        	int mintour[]=new int[n+1];
+        	int temp[]=new int[n+1];
+        	int mincost=Integer.MAX_VALUE,ccost,i,j,k;      
+       		if(start==n-1)
+        	{
+            		return(c[tour[n-1]][tour[n]]+c[tour[n]][1]);
+        	}        
+        	for(i=start+1; i<=n; i++) 
+        	{
+            		for(j=1; j<=n; j++)
+            		{
+            			temp[j] = tour[j]; 
+            		}	
+            		temp[start+1] = tour[i];
+	        	temp[i] = tour[start+1]; 
+	        	ccost=tspdp(c,temp,start+1,n);
+	        	if((c[tour[start]][tour[i]]+ccost)<mincost)
+	        	{            
+	        		mincost=c[tour[start]][tour[i]]+ccost;              
+	            		for(k=1; k<=n; k++)
+	            			mintour[k] = temp[k];
+	        	}
+        	}        
+        	for(i=1; i<=n; i++)
+           		tour[i] = mintour[i];
+        
+        	return mincost;       
+    	}
+}
+
+8 # DFS
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.io.*;
+import java.util.*;
+
+
+
+
+class DFS
+{
+    public static void main(String args[])
+    {
+        Scanner sc=new Scanner(System.in);
+		int nv,ne,i,s,v1,v2;
+		System.out.println("Enter number of vertices:");
+		nv=sc.nextInt();
+		System.out.println("Enter number of edges:");
+		ne=sc.nextInt();
+		Graph g = new Graph(nv);
+		System.out.println("Enter the edges:");
+		for(i=0;i<ne;i++)
+		{
+			v1=sc.nextInt();
+			v2=sc.nextInt();
+			g.addEdge(v1,v2);
+		}
+		System.out.println("Enter the starting vertex:");
+		s=sc.nextInt();
+        System.out.println("Depth First Traversal"
+            + "(starting from "+s+")");
+        boolean visited[] = new boolean[nv];
+        g.DFSTraversal(s,visited);
+       
+    }
+}
+class Graph 
+{
+    private int nv;  
+    private LinkedList<Integer> adj[];
+ 
+    /**
+     * @param n
+     */
+    Graph(int n)
+    {
+        nv = n;
+        adj = new LinkedList[nv];
+        for (int i=0;i<nv;i++)
+            adj[i]=new LinkedList();
+    }
+ 
+    void addEdge(int u, int v)
+    {
+        adj[u].add(v); 
+    }
+ 
+    void DFSTraversal(int v,boolean visited[])
+    {
+        // Mark the current node as visited and print it
+        visited[v] = true;
+        System.out.print(v + " ");
+        // Recur for all the vertices adjacent to this vertex
+        Iterator<Integer> i = adj[v].listIterator();
+        while (i.hasNext()) 
+        {
+            int n = i.next();
+            if (!visited[n])
+                DFSTraversal(n,visited);
+        }
+    }  
+}   
+
+9 #NQueens
+import java.util.Arrays;
+import java.util.Scanner;
+ 
+class NQueens
+{
+    static boolean isSafe(char mat[][],int r,int c)
+    {
+        // return false if two queens share the same column
+        for(int i=0; i<r; i++)
+        {
+            if (mat[i][c]=='Q') 
+            {
+                return false;
+            }
+        }
+ 
+        // return false if two queens share the same `\` diagonal
+        for(int i=r,j=c; i>=0 && j>=0; i--,j--)
+        {
+            if (mat[i][j]=='Q') 
+            {
+                return false;
+            }
+        }
+ 
+        // return false if two queens share the same `/` diagonal
+        for(int i=r,j=c; i>=0 && j<mat.length; i--,j++)
+        {
+            if (mat[i][j]=='Q') {
+                return false;
+            }
+        }
+        return true;
+    }
+ 
+    static void printSolution(char mat[][])
+    {
+    	for(int i=0;i<mat.length;i++)
+    	{
+    		for(int j=0;j<mat[i].length;j++)
+    		{
+    			System.out.print(mat[i][j]+" ");
+    		}System.out.println();
+    	}
+        System.out.println();
+    }
+ 
+    static void nqueen(char mat[][],int r)
+    {
+        // if `n` queens are placed successfully, print the solution
+        if (r==mat.length)
+        {
+            printSolution(mat);
+            return;
+        }
+        // place queen at every square in the current row `r`
+        // and recur for each valid movement
+        for (int i=0; i<mat.length; i++)
+        {
+            if (isSafe(mat,r,i))
+            {
+                mat[r][i]='Q';
+                nqueen(mat,r+1);
+                mat[r][i]='–';
+            }
+        }
+    }
+ 
+    public static void main(String[] args)
+    {
+        int n;
+        Scanner sc=new Scanner(System.in);
+        System.out.println("Enter number of Queens:");
+        n=sc.nextInt();
+        char mat[][] = new char[n][n];
+        for (int i=0; i<n; i++) {
+            Arrays.fill(mat[i],'–');
+        }
+        nqueen(mat,0);
+    }
+}
+
+10 # TSP
+import java.util.Scanner;
+
+public class TSP 
+{
+	public static void main(String[] args)
+	{
+		Scanner sc=new Scanner(System.in);
+        	int n,i,j,cost;        
+        	System.out.println("Enter Number of cities:");
+        	n=sc.nextInt();        
+        	int c[][]=new int[n+1][n+1];
+        	int tour[]=new int[n+1];
+        	System.out.println("Enter the cost matrix:");
+        	for(i=1;i<=n;i++)
+        		for(j=1;j<=n;j++)
+                		c[i][j]=sc.nextInt();        
+
+        	for(i=1;i<=n;i++)
+        		tour[i]=i; 
+        
+        	cost=tspdp(c,tour,1,n);        
+	    	System.out.print("The Optimal Tour is: ");        
+	    	for(i=1;i<=n;i++)
+	     		System.out.print(tour[i]+"->"); 
+	    
+	    	System.out.println("1");        
+	    	System.out.println("Minimum Cost: "+cost);
+    	}
+	
+    	static int tspdp(int c[][],int tour[],int start,int n) 
+    	{
+        	int mintour[]=new int[n+1];
+        	int temp[]=new int[n+1];
+        	int mincost=Integer.MAX_VALUE,ccost,i,j,k;      
+       		if(start==n-1)
+        	{
+            		return(c[tour[n-1]][tour[n]]+c[tour[n]][1]);
+        	}        
+        	for(i=start+1; i<=n; i++) 
+        	{
+            		for(j=1; j<=n; j++)
+            		{
+            			temp[j] = tour[j]; 
+            		}	
+            		temp[start+1] = tour[i];
+	        	temp[i] = tour[start+1]; 
+	        	ccost=tspdp(c,temp,start+1,n);
+	        	if((c[tour[start]][tour[i]]+ccost)<mincost)
+	        	{            
+	        		mincost=c[tour[start]][tour[i]]+ccost;              
+	            		for(k=1; k<=n; k++)
+	            			mintour[k] = temp[k];
+	        	}
+        	}        
+        	for(i=1; i<=n; i++)
+           		tour[i] = mintour[i];
+        
+        	return mincost;       
+    	}
+}
