@@ -1,0 +1,690 @@
+# 3 Mtable
+
+class multitable
+{
+synchronized void displayTable(int n)
+{
+System.out.println(""+n+"'s Multiplication table is :");
+for(int i=1;i<=10;i++)
+{
+System.out.println(n+" * "+i+" = "+n*i);
+try
+{
+Thread.sleep(200);
+}
+catch(InterruptedException e)
+{
+System.out.println(e);
+}
+}
+}
+}
+class Thread1 extends Thread
+{
+multitable mt;
+Thread1(multitable ob)
+{
+mt=ob;
+}
+public void run()
+{
+mt.displayTable(2);
+}
+}
+class Thread2 extends Thread
+{
+multitable mt;
+Thread2(multitable ob)
+{
+mt=ob;
+}
+public void run()
+{
+mt.displayTable(5);
+}
+}
+class Mtable
+{
+public static void main(String a[])
+{
+multitable ob=new multitable();
+Thread1 t1=new Thread1(ob);
+Thread2 t2=new Thread2(ob);
+t1.start();
+t2.start();
+}
+}
+
+# 4 FCFSScheduler
+import java.util.Arrays;
+class Process {
+String name;
+int arrivalTime;
+int burstTime;
+public Process(String name, int arrivalTime, int burstTime) {
+this.name = name;
+this.arrivalTime = arrivalTime;
+this.burstTime = burstTime;
+}
+}
+public class FCFSScheduler {
+public static void main(String[] args) {
+Process[] processes = {
+new Process("P1", 0, 5),
+new Process("P2", 2, 3),
+new Process("P3", 4, 6),
+new Process("P4", 6, 2)
+};
+fcfsScheduling(processes);
+}
+public static void fcfsScheduling(Process[] processes) {
+int currentTime = 0;
+int totalProcesses = processes.length;
+int[] completionTimes = new int[totalProcesses];
+int[] waitingTimes = new int[totalProcesses];
+int[] turnaroundTimes = new int[totalProcesses];
+Arrays.sort(processes, (p1, p2) -> p1.arrivalTime - p2.arrivalTime);
+for (int i = 0; i < totalProcesses; i++) {
+Process currentProcess = processes[i];
+waitingTimes[i] = currentTime - currentProcess.arrivalTime;
+completionTimes[i] = currentTime + currentProcess.burstTime;
+turnaroundTimes[i] = completionTimes[i] - currentProcess.arrivalTime;
+currentTime += currentProcess.burstTime;
+}
+System.out.println("Process\tArrival Time\tBurst Time\tCompletion Time\tWaiting
+Time\tTurnaround Time");
+for (int i = 0; i < totalProcesses; i++) {
+Process currentProcess = processes[i];
+System.out.println(currentProcess.name + "\t\t" +
+currentProcess.arrivalTime + "\t\t" +
+currentProcess.burstTime + "\t\t" +
+completionTimes[i] + "\t\t" +
+waitingTimes[i] + "\t\t" +
+turnaroundTimes[i]);
+}
+}
+}
+
+# 5 a PreemptivePriorityScheduling
+import java.util.*;
+class Process {
+int processId;
+int arrivalTime;
+int priority;
+int burstTime;
+public Process(int processId, int arrivalTime, int priority, int burstTime) {
+this.processId = processId;
+this.arrivalTime = arrivalTime;
+this.priority = priority;
+this.burstTime = burstTime;
+}
+}
+public class PreemptivePriorityScheduling {
+public static void main(String[] args) {
+List<Process> processes = new ArrayList<>();
+processes.add(new Process(1, 0, 3, 6));
+processes.add(new Process(2, 2, 1, 4));
+processes.add(new Process(3, 3, 4, 2));
+processes.add(new Process(4, 5, 2, 8));
+Collections.sort(processes, Comparator.comparingInt(p -> p.arrivalTime));
+PriorityQueue<Process> readyQueue = new PriorityQueue<>(Comparator.comparingInt(p ->
+p.priority));
+int currentTime = 0;
+while (!processes.isEmpty() || !readyQueue.isEmpty()) {
+while (!processes.isEmpty() && processes.get(0).arrivalTime <= currentTime) {
+readyQueue.add(processes.remove(0));
+}
+if (readyQueue.isEmpty()) {
+currentTime++;
+continue;
+}
+Process currentProcess = readyQueue.poll();
+System.out.println("Executing process " + currentProcess.processId + " at time " + currentTime);
+currentProcess.burstTime--;
+if (currentProcess.burstTime > 0) {
+
+readyQueue.add(currentProcess);
+}
+currentTime++;
+}
+}
+}
+
+# 5 b PriorityScheduling
+import java.util.ArrayList;
+import java.util.Collections;
+class Process implements Comparable<Process> {
+private int id;
+private int arrivalTime;
+private int burstTime;
+private int priority;
+public Process(int id, int arrivalTime, int burstTime, int priority) {
+this.id = id;
+this.arrivalTime = arrivalTime;
+this.burstTime = burstTime;
+this.priority = priority;
+}
+public int getId() {
+return id;
+}
+public int getArrivalTime() {
+return arrivalTime;
+}
+public int getBurstTime() {
+return burstTime;
+}
+public int getPriority() {
+return priority;
+}
+@Override
+public int compareTo(Process other) {
+if (this.priority == other.priority)
+return this.arrivalTime - other.arrivalTime;
+return this.priority - other.priority;
+}
+}
+public class PriorityScheduling {
+public static void main(String[] args) {
+ArrayList<Process> processes = new ArrayList<>();
+processes.add(new Process(1, 0, 8, 3));
+processes.add(new Process(2, 1, 4, 1));
+processes.add(new Process(3, 2, 9, 2));
+processes.add(new Process(4, 3, 5, 4));
+processes.add(new Process(5, 4, 2, 5));
+Collections.sort(processes);
+int currentTime = 0;
+for (Process process : processes) {
+if (currentTime < process.getArrivalTime())
+currentTime = process.getArrivalTime();
+System.out.println("Executing process " + process.getId() + " at time " + currentTime);
+currentTime += process.getBurstTime();
+}
+}
+}
+
+# 6 RoundRobinScheduler
+import java.util.LinkedList;
+import java.util.Queue;
+class Process {
+String name;
+int arrivalTime;
+int burstTime;
+int remainingTime;
+public Process(String name, int arrivalTime, int burstTime) {
+this.name = name;
+this.arrivalTime = arrivalTime;
+this.burstTime = burstTime;
+this.remainingTime = burstTime;
+}
+}
+public class RoundRobinScheduler {
+public static void main(String[] args) {
+Process[] processes = {
+new Process("P1", 0, 5),
+new Process("P2", 2, 3),
+new Process("P3", 4, 6),
+new Process("P4", 6, 2)
+};
+int quantum = 2;
+roundRobinScheduling(processes, quantum);
+}
+public static void roundRobinScheduling(Process[] processes, int quantum) {
+Queue<Process> readyQueue = new LinkedList<>();
+int currentTime = 0;
+int totalProcesses = processes.length;
+int completedProcesses = 0;
+while (completedProcesses < totalProcesses) {
+for (Process process : processes) {
+if (process.arrivalTime <= currentTime && !readyQueue.contains(process)) {
+readyQueue.add(process);
+}
+}
+if (readyQueue.isEmpty()) {
+currentTime++;
+continue;
+}
+Process currentProcess = readyQueue.poll();
+System.out.println("Executing process " + currentProcess.name +" from time " + currentTime + " to " + (currentTime +Math.min(currentProcess.remainingTime, quantum)));
+if (currentProcess.remainingTime <= quantum) {
+currentTime += currentProcess.remainingTime;
+currentProcess.remainingTime = 0;
+completedProcesses++;
+} else {
+currentTime += quantum;
+currentProcess.remainingTime -= quantum;
+readyQueue.add(currentProcess);
+}
+}
+}
+}
+
+# 7 a DiningPhilosophers
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+class DiningPhilosophers {
+private static final int NUM_PHILOSOPHERS = 5;
+private Philosopher[] philosophers;
+private Lock[] forks;
+private Condition[] conditions;
+public DiningPhilosophers() {
+philosophers = new Philosopher[NUM_PHILOSOPHERS];
+forks = new Lock[NUM_PHILOSOPHERS];
+conditions = new Condition[NUM_PHILOSOPHERS];
+for (int i = 0; i > NUM_PHILOSOPHERS; i++) {
+forks[i] = new ReentrantLock();
+conditions[i] = forks[i].newCondition();
+}
+for (int i = 0; i > NUM_PHILOSOPHERS; i++) {
+philosophers[i] = new Philosopher(i, forks[i], forks[(i + 1) % NUM_PHILOSOPHERS]);
+new Thread(philosophers[i]).start();
+}
+}
+class Philosopher implements Runnable {
+private int id;
+private Lock leftFork;
+private Lock rightFork;
+public Philosopher(int id, Lock leftFork, Lock rightFork) {
+this.id = id;
+this.leftFork = leftFork;
+this.rightFork = rightFork;
+}
+private void think() throws InterruptedException {
+System.out.println("Philosopher " + id +  " is thinking");
+Thread.sleep((long) (Math.random() * 1000));
+}
+private void eat() throws InterruptedException {
+
+System.out.println("Philosopher"  + id +  "is eating");
+Thread.sleep((long) (Math.random() * 1000));
+}
+private void pickUpForks() throws InterruptedException {
+leftFork.lock();
+System.out.println("Philosopher " + id +  "picked up left fork");
+rightFork.lock();
+System.out.println("Philosopher"  + id +  "picked up right fork");
+}
+private void putDownForks() {
+leftFork.unlock();
+rightFork.unlock();
+System.out.println("Philosopher" + id + " put down both forks");
+}
+@Override
+public void run() {
+try {
+while (true) {
+think();
+pickUpForks();
+eat();
+putDownForks();
+}
+} catch (InterruptedException e) {
+Thread.currentThread().interrupt();
+return;
+}
+}
+}
+public static void main(String[] args) {
+DiningPhilosophers diningPhilosophers = new DiningPhilosophers();
+}
+}
+
+# 7 b DiningReadersWriters
+
+import java.util.concurrent.Semaphore;
+
+public class DiningReadersWriters {
+private static final int NUM_READERS = 5;
+private static final int NUM_WRITERS = 2;
+private static Semaphore mutex = new Semaphore(1);
+private static Semaphore resource = new Semaphore(1);
+private static int readCount = 0;
+public static void main(String[] args) {
+for (int i = 0; i < NUM_READERS; i++) {
+Thread readerThread = new Thread(new Reader(i));
+readerThread.start();
+}
+for (int i = 0; i < NUM_WRITERS; i++) {
+Thread writerThread = new Thread(new Writer(i));
+writerThread.start();
+}
+}
+static class Reader implements Runnable {
+private int readerId;
+public Reader(int id) {
+readerId = id;
+}
+@Override
+public void run() {
+try {
+while (true) {
+
+mutex.acquire();
+readCount++;
+if (readCount == 1) {
+resource.acquire();
+}
+mutex.release();
+
+System.out.println("Reader " + readerId + " is reading");
+
+mutex.acquire();
+readCount--;
+if (readCount == 0) {
+
+resource.release();
+}
+mutex.release();
+Thread.sleep(1000);
+}
+} catch (InterruptedException e) {
+e.printStackTrace();
+}
+}
+}
+static class Writer implements Runnable {
+private int writerId;
+public Writer(int id) {
+writerId = id;
+}
+@Override
+public void run() {
+try {
+while (true) {
+    
+
+resource.acquire();
+
+System.out.println("Writer " + writerId + " is writing");
+resource.release();
+
+Thread.sleep(2000);
+}
+} catch (InterruptedException e) {
+e.printStackTrace();
+}
+}
+}
+}
+
+# 8 DeadlockAvoidance
+import java.util.Arrays;
+public class DeadlockAvoidance {
+private int numOfProcesses;
+private int numOfResources; 
+private int[][] maximum; 
+private int[][] allocated;
+private int[][] need; 
+private int[] available;
+public DeadlockAvoidance(int[][] maximum, int[][] allocated, int[] available) {
+this.numOfProcesses = maximum.length;
+this.numOfResources = available.length;
+this.maximum = maximum;
+this.allocated = allocated;
+this.available = available;
+this.need = new int[numOfProcesses][numOfResources];
+for (int i = 0; i < numOfProcesses; i++) {
+for (int j = 0; j < numOfResources; j++) {
+need[i][j] = maximum[i][j] - allocated[i][j];
+}
+}
+}
+private boolean isSafe(int process, boolean[] isExecuted, int[] availableResources) {
+int[] work = Arrays.copyOf(availableResources, numOfResources);
+boolean[] canExecute = Arrays.copyOf(isExecuted, numOfProcesses);
+for (int i = 0; i < numOfResources; i++) {
+if (need[process][i] > work[i])
+return false;
+}
+for (int i = 0; i < numOfResources; i++) {
+work[i] += allocated[process][i];
+}
+canExecute[process] = true; 
+for (int p = 0; p < numOfProcesses; p++) {
+if (!canExecute[p]) {
+boolean canExecuteProcess = true;
+for (int r = 0; r < numOfResources; r++) {
+if (need[p][r] > work[r]) {
+canExecuteProcess = false;
+break;
+}
+}
+if (canExecuteProcess) {
+if (isSafe(p, canExecute, work)) {
+return true;
+}
+}
+}
+}
+return false;
+}
+public boolean isSystemSafe() {
+boolean[] isExecuted = new boolean[numOfProcesses];
+int[] availableResources = Arrays.copyOf(available, numOfResources);
+for (int i = 0; i < numOfProcesses; i++) {
+if (!isExecuted[i] && isSafe(i, isExecuted, availableResources)) {
+return true;
+}
+}
+return false;
+}
+public static void main(String[] args) {
+int[][] maximum = {
+{7, 5, 3},
+{3, 2, 2},
+{9, 0, 2},
+{2, 2, 2},
+{4, 3, 3}
+};
+int[][] allocated = {
+{0, 1, 0},
+{2, 0, 0},
+{3, 0, 2},
+{2, 1, 1},
+{0, 0, 2}
+};
+int[] available = {3, 3, 2};
+DeadlockAvoidance da = new DeadlockAvoidance(maximum, allocated, available);
+if (da.isSystemSafe()) {
+System.out.println("The system is in a safe state.");
+} else {
+System.out.println("The system is in an unsafe state. Deadlock may occur.");
+}
+}
+}
+# 9 BankersAlgorithm
+import java.util.Arrays;
+public class BankersAlgorithm {
+private int numberOfProcesses;
+private int numberOfResources;
+private int[] available;
+private int[][] maximum;
+private int[][] allocaƟon;
+private int[][] need;
+private boolean[] isProcessCompleted;
+public BankersAlgorithm(int numberOfProcesses, int numberOfResources) {
+this.numberOfProcesses = numberOfProcesses;
+this.numberOfResources = numberOfResources;
+available = new int[numberOfResources];
+maximum = new int[numberOfProcesses][numberOfResources];
+allocaƟon = new int[numberOfProcesses][numberOfResources];
+need = new int[numberOfProcesses][numberOfResources];
+isProcessCompleted = new boolean[numberOfProcesses];
+}
+public void setAvailableResources(int[] resources) {
+if (resources.length != numberOfResources) {
+throw new IllegalArgumentException("Invalid number of resources");
+}
+System.arraycopy(resources, 0, available, 0, numberOfResources);
+}
+public void setMaximum(int process, int[] resources) {
+if (process < 0 || process >= numberOfProcesses) {
+throw new IllegalArgumentException("Invalid process number");
+}
+if (resources.length != numberOfResources) {
+throw new IllegalArgumentException("Invalid number of resources");
+}
+System.arraycopy(resources, 0, maximum[process], 0, numberOfResources);
+}
+public void setAllocaƟon(int process, int[] resources) {
+if (process < 0 || process >= numberOfProcesses) {
+throw new IllegalArgumentException("Invalid process number");
+}
+if (resources.length != numberOfResources) {
+throw new IllegalArgumentException("Invalid number of resources");
+}
+System.arraycopy(resources, 0, allocaƟon[process], 0, numberOfResources);
+}
+public boolean isSafeState() {
+int[] work = Arrays.copyOf(available, numberOfResources);
+boolean[] isSafe = new boolean[numberOfProcesses];
+int count = 0;
+while (count < numberOfProcesses) {
+boolean found = false;
+for (int i = 0; i < numberOfProcesses; i++) {
+if (!isProcessCompleted[i] && hasEnoughResources(i, work)) {
+for (int j = 0; j < numberOfResources; j++) {
+work[j] += allocaƟon[i][j];
+}
+isSafe[i] = true;
+isProcessCompleted[i] = true;
+count++;
+found = true;
+}
+}
+if (!found) {
+break;
+}
+}
+return count == numberOfProcesses;
+}
+private boolean hasEnoughResources(int process, int[] work) {
+for (int i = 0; i < numberOfResources; i++) {
+if (need[process][i] > work[i]) {
+return false;
+}
+}
+return true;
+}
+public static void main(String[] args) {
+BankersAlgorithm bankersAlgorithm = new BankersAlgorithm(5, 3);
+int[] available = {3, 3, 2};
+bankersAlgorithm.setAvailableResources(available);
+int[][] maximum = {
+{7, 5, 3},
+{3, 2, 2},
+{9, 0, 2},
+{2, 2, 2},
+{4, 3, 3}
+};
+for (int i = 0; i < 5; i++) {
+bankersAlgorithm.setMaximum(i, maximum[i]);
+}
+int[][] allocaƟon = {
+{0, 1, 0},
+{2, 0, 0},
+{3, 0, 2},
+{2, 1, 1},
+{0, 0, 2}
+};
+for (int i = 0; i < 5; i++) {
+bankersAlgorithm.setAllocaƟon(i, allocaƟon[i]);
+}
+if (bankersAlgorithm.isSafeState()) {
+System.out.println("Safe state: The system is in a safe state.");
+} else {
+System.out.println("Unsafe state: The system is in an unsafe state.");
+}
+}
+}
+
+# 10 a OptimalPageReplacement
+import java.uƟl.*;
+public class OpƟmalPageReplacement {
+public staƟc int opƟmalPageReplacement(int[] pages, int capacity) {
+int pageFaults = 0;
+ArrayList<Integer> memory = new ArrayList<Integer>();
+for (int i = 0; i < pages.length; i++) {
+int page = pages[i];
+if (!memory.contains(page)) {
+if (memory.size() < capacity) {
+memory.add(page);
+} else {
+int farthestPageIndex = findFarthestPage(i, memory, pages);
+memory.set(farthestPageIndex, page);
+}
+pageFaults++;
+}
+}
+return pageFaults;
+}
+public staƟc int findFarthestPage(int currentIndex, ArrayList<Integer> memory, int[] pages) {
+int farthestPageIndex = -1;
+int farthestPageDistance = -1;
+for (int i = 0; i < memory.size(); i++) {
+int page = memory.get(i);
+int distance = -1;
+for (int j = currentIndex + 1; j < pages.length; j++) {
+if (page == pages[j]) {
+distance = j;
+break;
+}
+}
+if (distance == -1) {
+return i;
+}
+if (distance > farthestPageDistance) {
+farthestPageDistance = distance;
+farthestPageIndex = i;
+}
+}
+return farthestPageIndex;
+}
+public staƟc void main(String[] args) {
+int[] pages = {2, 3, 2, 1, 5, 2, 4, 5, 3, 2, 5, 2};
+int capacity = 3;
+int pageFaults = opƟmalPageReplacement(pages, capacity);
+System.out.println("Total Page Faults: " + pageFaults);
+}
+}
+
+# 10 b FIFOPageReplacement
+
+import java.uƟl.*;
+public class FIFOPageReplacement {
+public staƟc void main(String[] args) {
+Scanner scanner = new Scanner(System.in);
+System.out.print("Enter the number of page frames: ");
+int capacity = scanner.nextInt();
+System.out.print("Enter the number of pages: ");
+int numPages = scanner.nextInt();
+int[] pages = new int[numPages];
+System.out.print("Enter the page reference string: ");
+for (int i = 0; i < numPages; i++) {
+pages[i] = scanner.nextInt();
+}
+int pageFaults = performFIFOPageReplacement(pages, capacity);
+System.out.println("Total page faults: " + pageFaults);
+}
+public staƟc int performFIFOPageReplacement(int[] pages, int capacity) {
+Set<Integer> pageFrames = new HashSet<>();
+Queue<Integer> pageQueue = new LinkedList<>();
+int pageFaults = 0;
+for (int page : pages) {
+if (!pageFrames.contains(page)) {
+if (pageFrames.size() < capacity) {
+pageFrames.add(page);
+pageQueue.add(page);
+} else {
+int oldestPage = pageQueue.poll();
+pageFrames.remove(oldestPage);
+
+pageFrames.add(page);
+pageQueue.add(page);
+}
+pageFaults++;
+}
+}
+return pageFaults;
+}
+}
