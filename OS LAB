@@ -1,3 +1,50 @@
+# 2
+//add
+read -p "Enter first number: " num1
+read -p "Enter second number: " num2
+sum=$(( $num1 + $num2 ))
+echo "Sum is: $sum"   
+
+//fact
+
+echo "Enter a number"
+# Read the number
+read num                     
+fact=1                    
+for((i=2;i<=num;i++))
+{
+  fact=$((fact * i)) 
+}
+echo $fact
+
+//fibonacci
+
+
+N=6
+a=0
+b=1
+echo "The Fibonacci series is : "
+for (( i=0; i<N; i++ ))
+do
+	echo -n "$a "
+	fn=$((a + b))
+	a=$b
+	b=$fn
+done
+
+
+\\ basic sal/gross sal
+
+echo "enter the basic salary:"
+read bsal
+if [ $bsal -lt 1500 ]
+then
+gsal=$((bsal+((bsal/100)*10)+(bsal/100)*90))
+echo "The gross salary : $gsal"
+fi
+if [ $bsal -ge 1500 ]
+then
+
 # 3 Mtable
 
 class multitable
@@ -599,9 +646,9 @@ System.out.println("Unsafe state: The system is in an unsafe state.");
 }
 
 # 10 a OptimalPageReplacement
-import java.uƟl.*;
-public class OpƟmalPageReplacement {
-public staƟc int opƟmalPageReplacement(int[] pages, int capacity) {
+import java.util.*;
+public class OptimalPageReplacement {
+public static int optimalPageReplacement(int[] pages, int capacity) {
 int pageFaults = 0;
 ArrayList<Integer> memory = new ArrayList<Integer>();
 for (int i = 0; i < pages.length; i++) {
@@ -618,7 +665,7 @@ pageFaults++;
 }
 return pageFaults;
 }
-public staƟc int findFarthestPage(int currentIndex, ArrayList<Integer> memory, int[] pages) {
+public static static int findFarthestPage(int currentIndex, ArrayList<Integer> memory, int[] pages) {
 int farthestPageIndex = -1;
 int farthestPageDistance = -1;
 for (int i = 0; i < memory.size(); i++) {
@@ -640,33 +687,35 @@ farthestPageIndex = i;
 }
 return farthestPageIndex;
 }
-public staƟc void main(String[] args) {
+public static void main(String[] args) {
 int[] pages = {2, 3, 2, 1, 5, 2, 4, 5, 3, 2, 5, 2};
 int capacity = 3;
-int pageFaults = opƟmalPageReplacement(pages, capacity);
+int pageFaults = optimalPageReplacement(pages, capacity);
 System.out.println("Total Page Faults: " + pageFaults);
 }
 }
 
 # 10 b FIFOPageReplacement
 
-import java.uƟl.*;
+import java.util.Set;
+import java.util.*;
 public class FIFOPageReplacement {
-public staƟc void main(String[] args) {
-Scanner scanner = new Scanner(System.in);
-System.out.print("Enter the number of page frames: ");
-int capacity = scanner.nextInt();
-System.out.print("Enter the number of pages: ");
-int numPages = scanner.nextInt();
-int[] pages = new int[numPages];
-System.out.print("Enter the page reference string: ");
-for (int i = 0; i < numPages; i++) {
-pages[i] = scanner.nextInt();
+public static void main(String[] args) {
+try (Scanner scanner = new Scanner(System.in)) {
+    System.out.print("Enter the number of page frames: ");
+    int capacity = scanner.nextInt();
+    System.out.print("Enter the number of pages: ");
+    int numPages = scanner.nextInt();
+    int[] pages = new int[numPages];
+    System.out.print("Enter the page reference string: ");
+    for (int i = 0; i < numPages; i++) {
+    pages[i] = scanner.nextInt();
+    }
+    int pageFaults = performFIFOPageReplacement(pages, capacity);
+    System.out.println("Total page faults: " + pageFaults);
 }
-int pageFaults = performFIFOPageReplacement(pages, capacity);
-System.out.println("Total page faults: " + pageFaults);
 }
-public staƟc int performFIFOPageReplacement(int[] pages, int capacity) {
+public static int performFIFOPageReplacement(int[] pages, int capacity) {
 Set<Integer> pageFrames = new HashSet<>();
 Queue<Integer> pageQueue = new LinkedList<>();
 int pageFaults = 0;
