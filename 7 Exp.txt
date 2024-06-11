@@ -1,0 +1,147 @@
+java
+package com.example.exp7;
+import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
+
+public class MainActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        // Load Fragment1 into fragment1_container
+        FirstFragment fragment1 = new FirstFragment();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment1_container, fragment1)
+                .commit();
+
+        // Load Fragment2 into fragment2_container
+        SecondFragment fragment2 = new SecondFragment();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment2_container, fragment2)
+                .commit();
+    }
+}
+xml:
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+    <FrameLayout
+        android:id="@+id/fragment1_container"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"/>
+
+    <FrameLayout
+        android:id="@+id/fragment2_container"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"/>
+
+</LinearLayout>
+
+manifest:
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.exp7">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="MyExp7"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Exp7">
+        <activity
+            android:name=".MainActivity"
+            android:label="MyExp7"
+            android:theme="@style/Theme.Exp7"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+    </application>
+
+</manifest>
+
+fragment first java:
+package com.example.exp7;
+
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+
+public class FirstFragment extends Fragment {
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_layout, container, false);
+        view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.gray));
+        return view;
+    }
+}
+
+fragment Second java:
+package com.example.exp7;
+
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import android.widget.TextView;
+
+
+public class SecondFragment extends Fragment {
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_layout, container, false);
+
+        // Find the TextView and update its text
+        TextView textView = view.findViewById(R.id.text_view);
+        textView.setText("Hello Fragment 2");
+
+        // Set background color
+        view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.olive));
+
+        return view;
+    }
+}
+
+fragent layout:
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center">
+
+    <TextView
+        android:id="@+id/text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:textColor="@android:color/white"
+        android:text="Hello Fragment 1" />
+
+</RelativeLayout>
+
+color:
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="gray">#808080</color>
+    <color name="olive">#808000</color>
+</resources>
