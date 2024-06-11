@@ -1,4 +1,7 @@
-java 
+java:
+package com.example.exp4;
+
+
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -11,7 +14,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class MainActivity2 extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
 
     EditText editTextUserName, editTextPassword, editTextAddress, editTextAge;
     RadioGroup radioGroupGender;
@@ -66,14 +69,13 @@ public class MainActivity2 extends AppCompatActivity {
     }
 }
 
-XML
-
+XML:
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    tools:context=".MainActivity2">
+    tools:context=".MainActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -133,9 +135,9 @@ XML
 
         <DatePicker
             android:id="@+id/datePickerDOB"
-            android:layout_below="@id/editTextAge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_width="331dp"
+            android:layout_height="396dp"
+            android:layout_below="@id/editTextAge" />
 
         <Spinner
             android:id="@+id/spinnerState"
@@ -164,7 +166,10 @@ XML
     </RelativeLayout>
 </ScrollView>
 
-string
+String:
+
+
+
 <resources>
     <string name="app_name">YourAppName</string>
 
@@ -182,6 +187,3 @@ string
         <!-- Add more states as needed -->
     </string-array>
 </resources>
-
-
-
